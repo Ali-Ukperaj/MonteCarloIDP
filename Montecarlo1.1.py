@@ -342,13 +342,17 @@ Goals = {
 
 # Determine starting sequence by minimizing the energy function out of 100 randomly generated sequences
 # Initialize array for saving pairs of sequences and their respective "energies"
-MinEnergySeq = np.empty(shape=[100, 2], dtype=object)
-for i in range(100):
-    SeqRand = np.random.choice(Amino_1, DesLength)
-    energyRand = energy_func(SeqRand)
-    MinEnergySeq[i] = ["".join(SeqRand), energyRand]
-# Sequence with the minimum energy
-Seq = np.array(list(MinEnergySeq[np.argmin(MinEnergySeq[:, 1], axis=0), 0]))
+# ** If user wants no mutations, skip this step
+if mutRatio == 0:
+    Seq = Ideal_Seq
+else:
+    MinEnergySeq = np.empty(shape=[100, 2], dtype=object)
+    for i in range(100):
+        SeqRand = np.random.choice(Amino_1, DesLength)
+        energyRand = energy_func(SeqRand)
+        MinEnergySeq[i] = ["".join(SeqRand), energyRand]
+    # Sequence with the minimum energy
+    Seq = np.array(list(MinEnergySeq[np.argmin(MinEnergySeq[:, 1], axis=0), 0]))
 
 # Set starting sequence's parameters and initialize the iterations variable and output array for tracking param movement
 params = param_calc(Seq)
